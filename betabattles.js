@@ -3,7 +3,7 @@ console.log("hello world");
 var server;
 var client;
 
-setInterval(tick, 500);
+t = setInterval(tick, 500);
 
 function init() {
     server = new serverState();
@@ -28,8 +28,10 @@ function display() {
 
 function tick() {
     if(server == null) {
-        console.log("??");
         return;
+    }
+    if(server.gameEnd == true) {
+        clearInteral(t);
     }
     console.log('ticking');
     var playerState = server.tick();

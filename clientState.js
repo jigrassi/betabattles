@@ -13,7 +13,7 @@ class clientState {
         this.income = 5;
         this.funds = 0;
         this.myArmy = 0;
-        this.oppArmy = 0;
+        this.oppArmy = 'unknown';
         this.myArmyStance = 'passive'; //'aggressive'
         this.oppArmyStance = 'passive';
         this.myBase = 100;
@@ -34,7 +34,7 @@ class clientState {
 
     setArmyStance(stance) {
         myArmyStance = stance;
-        server.increasePlayerFunds();
+        server.setPlayerStance(stance);
     }
 
     increaseIncome() {
