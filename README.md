@@ -1,2 +1,3 @@
-# betabattles
-sicko game
+# β βattles
+
+it's a great game, trust us.
