@@ -7,11 +7,13 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
     canvas.width = 760;
     canvas.height = 650;
 
+    Painter.defaultStyles();
+
     requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
 
     clientState = new ClientState();
 
-    // if (document.readyState === "complete") { prepareEventHandlers(); }
+    if (document.readyState === "complete") { prepareEventHandlers(); }
 
     // SOCKETS ##################################################
 
@@ -29,6 +31,46 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
     socket.on('update', function(newState) {
         clientState.update(newState);
     });
+
+    // LISTENERS ####################################################
+    function onKeyDown(e) {
+        switch(e) {
+            case 101:
+                increaseIncome();
+                break;
+            case 97:
+                setArmyStance('aggressive');
+                break;
+            case 115:
+                setArmyStance('passive');
+                break;
+            case 114:
+                increaseArmy();
+                break;
+        }
+    }
+
+    function prepareEventHandlers() {
+        var canvasPosition = {
+            x: canvas.offsetLeft,
+            y: canvas.offsetTop
+        };
+
+        window.addEventListener('keypress', onKeyDown, false);
+        // canvas.addEventListener('click', function(e) {
+        //     var mouse = {
+        //         x: e.pageX - canvasPosition.x,
+        //         y: e.pageY - canvasPosition.y
+        //     };
+        // }, false);
+
+        // canvas.addEventListener('mousemove', function(e) {
+        //     var mouse = {
+        //         x: e.pageX - canvasPosition.x,
+        //         y: e.pageY - canvasPosition.y
+        //     };
+        // }, false);
+    }
 
     // MAIN LOOP STUFF ##############################################
     var gstate = "waiting";
