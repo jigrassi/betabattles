@@ -8,7 +8,34 @@
 </head>
 
 <body>
-<canvas id="game"></canvas>
+    <div id=loadingScreen>
+        <h2> Instructions </h2>
+        <p> Win by building up an army to destroy the opponent's base <p>
+        <h2> Hotkeys </h2>
+        <p> E - Economy: Spend 5 funds to increase your income by 1. Income generates more funds every second. </p>
+        <p> A - Attack: Set your army to attack the opponent. Your opponent will be able to see your army size. If your opponent is attacking, the armies will fight and kill each other. If the opponent is stealthed, you will damage their base. </p>
+        <p> S - Stealth: Your army will not attack and its size will be hidden from the opponent. If your opponent is attacking, your base will take damage. </p>
+        <p> R - Recruit: Spend 5 funds to increase your army size by 1. </p>
+
+        <button id='ready' onclick="toggleReady()">
+            Ready
+        </button>
+
+        <p> Opponent: Not Present </p>
+        <p> Opponent Status: Not Ready </p>
+
+        <p id='username'> 
+            <button id='username' onclick='setUsername()'>
+                Set Username
+            </button>
+        </p>
+
+        <p id='playerStatus'> Your Status: Not Ready </p> 
+    </div>
+    <div id=gameCanvas>
+        <canvas id="game"></canvas>
+    </div>
+<script src="intro.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script data-main="main" src="require.js"></script>
 </body>

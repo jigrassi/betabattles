@@ -98,15 +98,20 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
 
     // Draw everything
     var render = function () {
-        Painter.drawBG();
-
+        //Painter.drawBG();
+        console.log(gstate);
         switch(gstate) {
             case "waiting":
-                Painter.drawText('Waiting for Opponent');
+                document.getElementById('loadingScreen').style.display='block';
+                document.getElementById('gameCanvas').style.display='none';
+
+                //Painter.drawText('Waiting for Opponent');
                 break;
             case "playing":
+                Painter.drawBG();
+                document.getElementById('gameCanvas').style.display='block';
+                document.getElementById('loadingScreen').style.display='none';
                 Painter.drawPlayerData(clientState);
-                Painter.drawOpponentData(clientState);
                 break;
             case "dc":
                 Painter.drawText('Disconnected');
@@ -117,7 +122,7 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
     // The main paint loop
     var main = function () {
         render();
-        requestAnimationFrame(main);
+        requestAnimationFrame(main);    
     };
 
     return {
