@@ -11,10 +11,6 @@ define(function() {
             ctx.restore();
         },
 
-        drawMatrices: function(ctrl) {
-
-        },
-
         drawPlayerData: function(ctrl) {
             ctx.save();
             ctx.save();
@@ -41,41 +37,6 @@ define(function() {
             ctx.fillText("Base: ", 200, 475);
             ctx.stroke();
             ctx.restore();
-            ctx.restore();
-        },
-
-        drawHover: function(x, y, size) {
-            ctx.save();
-            ctx.fillStyle = '#ffcc99';
-            ctx.fillRect(x,y,size,size);
-            ctx.restore();
-        },
-
-        drawPlayerWin: function(result) {
-            if(result == 0) {
-                ctx.fillText("You Win!", 370, 313);
-            } else if(result == 1) {
-                ctx.fillText("You Lose!", 366, 313);
-            } else {
-                ctx.fillText("It's a Tie!", 380, 313);
-            }
-        },
-
-        drawWaiting: function() {
-            ctx.save();
-            ctx.font = "40px Helvetica";
-            ctx.fillText('Looking for opponent...', canvas.width/2, canvas.height/2);
-            ctx.restore();
-        },
-
-        drawTurn: function(id) {
-
-        },
-
-        drawDisconnect: function() {
-            ctx.save();
-            ctx.font = "40px Helvetica";
-            ctx.fillText('Your opponent has left the game.', canvas.width/2, canvas.height/2);
             ctx.restore();
         },
 
