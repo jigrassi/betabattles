@@ -40,6 +40,13 @@ define(function() {
             ctx.restore();
             ctx.restore();
         },
+        
+        drawText: function(text) {
+            ctx.save();
+            ctx.font = "40px Helvetica";
+            ctx.fillText(text, canvas.width/2, canvas.height/2);
+            ctx.restore();
+        },
 
         defaultStyles: function() {
             ctx.fillStyle = "#000000";

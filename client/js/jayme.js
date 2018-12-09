@@ -18,9 +18,8 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
     var socket = io('/betabattles');
     var display_msg = '';
 
-    socket.on('fuck', function(msg) {
-        display_msg = msg;
-        setState('fuck');
+    socket.on('gamestart', function(msg) {
+        setState('playing');
     });
 
     socket.on('dc', function() {
@@ -59,7 +58,7 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
                 Painter.drawText('Waiting for Opponent');
                 break;
             case "playing":
-                Painter.drawText(display_msg);
+                Painter.drawPlayerData(clientState);
                 break;
             case "dc":
                 Painter.drawText('Disconnected');

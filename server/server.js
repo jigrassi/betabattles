@@ -17,7 +17,7 @@ module.exports = {
         this.game_lookup[player.id] = game;
 
         game.init(this.waiting_player, player);
-        game.fuck(Object.keys(this.game_lookup).length);
+        game.gamestart();
         this.clear_waiting();
     },
 

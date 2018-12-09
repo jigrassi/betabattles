@@ -14,9 +14,9 @@ module.exports = {
         this.serverState = new ServerState();
     },
 
-    fuck: function(x) {
-        this.p1.emit('fuck', x - 1);
-        this.p2.emit('fuck', x);
+    gamestart: function() {
+        this.p1.emit('gamestart');
+        this.p2.emit('gamestart');
     },
 
     setArmyStance(id, stance) {
