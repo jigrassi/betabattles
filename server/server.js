@@ -1,6 +1,6 @@
 module.exports = {
     waiting_player: -1,
-    game_lookup: {},
+    game_lookup: new Map(),
 
     // player here is a socket connection instance
     join: function(player) {
@@ -39,6 +39,14 @@ module.exports = {
     },
 
     disconnect: function(player) {
-        this.game_lookup[player.id].disconnect_all();
+        console.log(`player ${player.id} disconnected`);
+        game = this.game_lookup[player.id];
+        if (game != null) {
+            game.disconnect_all();
+        }
+        this.game_lookup.delete(player.id);
+        if (this.waiting_player == player) {
+            this.clear_waiting();
+        }
     }
 };
