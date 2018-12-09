@@ -10,8 +10,6 @@ module.exports = {
             this.waiting_player = player;
             return;
         }
-        // console.log(this.waiting_player);
-        console.log(`matched with player ${player.id}`);
         var game = require('./game.js');
         this.game_lookup[this.waiting_player.id] = game;
         this.game_lookup[player.id] = game;

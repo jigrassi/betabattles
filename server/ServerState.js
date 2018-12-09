@@ -11,31 +11,37 @@ module.exports = class ServerState {
         this.gameEnd = false;       
     }
 
-    increaseIncome(id) {
-        if(this.players[0].funds < 5) {
+    increaseIncome(index) {
+        console.log("increaseIncome " + index + " : " + this.stateString());
+        var player = this.players[index];
+        if(player.funds < 5) {
             return;
         }
-        this.players[0].funds -= 5;
-        this.players[0].income += 1;
+        player.funds -= 5;
+        player.income += 1;
     }
 
-    increaseArmy(id) {
-        if(this.players[0].funds < 5) {
+    increaseArmy(index) {
+        console.log("increaseArmy " + index + " : " + this.stateString());
+        var player = this.players[index];
+        if(player.funds < 5) {
             return;
         } 
-        this.players[0].funds -= 5;
-        this.players[0].army += 1;
+        player.funds -= 5;
+        player.army += 1;
     }
 
-    setArmyStance(id, stance) {
+    setArmyStance(index, stance) {
+        var player = this.players[index];
         if(stance == 'passive') {
-            this.players[0].stance = 'passive';
+            player.stance = 'passive';
         } else if (stance == 'aggressive') {
-            this.players[0].stance = 'aggressive';
+            player.stance = 'aggressive';
         }
     }
 
     tick() {
+        console.log("tick : " + this.stateString());
         this.players[0].funds += this.players[0].income;
         this.players[1].funds += this.players[1].income;
 
@@ -57,20 +63,25 @@ module.exports = class ServerState {
         } else if (this.players[0].base <= 0) {
             this.gameEnd = true;
         }
-        return this.createPlayerState();
     }
 
-    createPlayerState() {
+    createPlayerState(index) {
+        var you = this.players[index];
+        var opponent = this.players[1 - index];
         var playerState = {
-            funds: this.players[0].funds,
-            income: this.players[0].income,
-            myArmy: this.players[0].army,
-            oppArmy: this.players[1].stance == 'aggressive' ? this.players[1].army : 'unknown',
-            myArmyStance: this.players[0].stance,
-            oppArmyStance: this.players[1].stance,
-            myBase: this.players[0].base,
-            oppBase: this.players[1].base
+            funds: you.funds,
+            income: you.income,
+            myArmy: you.army,
+            oppArmy: opponent.stance == 'aggressive' ? opponent.army : 'unknown',
+            myArmyStance: you.stance,
+            oppArmyStance: opponent.stance,
+            myBase: you.base,
+            oppBase: opponent.base
         }
         return playerState;
+    }
+
+    stateString() {
+        return JSON.stringify(this.players[0]) + " : " + JSON.stringify(this.players[1]);
     }
 };
