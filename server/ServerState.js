@@ -11,7 +11,7 @@ module.exports = class ServerState {
         this.gameEnd = false;       
     }
 
-    increasePlayerFunds(id) {
+    increaseFunds(id) {
         if(this.players[0].funds < 5) {
             return;
         }
@@ -19,7 +19,7 @@ module.exports = class ServerState {
         this.players[0].income += 1;
     }
 
-    increasePlayerArmy(id) {
+    increaseArmy(id) {
         if(this.players[0].funds < 5) {
             return;
         } 
@@ -27,7 +27,7 @@ module.exports = class ServerState {
         this.players[0].army += 1;
     }
 
-    setPlayerArmyStance(id, stance) {
+    setArmyStance(id, stance) {
         if(stance == 'passive') {
             this.players[0].stance = 'passive';
         } else if (stance == 'aggressive') {

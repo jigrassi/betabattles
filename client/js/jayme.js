@@ -31,22 +31,24 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
     });
 
     socket.on('update', function(newState) {
+        console.log('updating..');
         clientState.update(newState);
     });
 
     // LISTENERS ####################################################
     function onKeyDown(e) {
-        switch(e) {
-            case 101:
+        console.log(e.key);
+        switch(e.key) {
+            case 'e':
                 increaseIncome();
                 break;
-            case 97:
+            case 'a':
                 setArmyStance('aggressive');
                 break;
-            case 115:
+            case 's':
                 setArmyStance('passive');
                 break;
-            case 114:
+            case 'r':
                 increaseArmy();
                 break;
         }
@@ -81,16 +83,16 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
         gstate = state;
     }
 
-    function setArmyStance(stance) {
-        socket.emit('setPlayerArmyStance', stance);
-    }
-
     function increaseIncome() {
-        socket.emit('increasePlayerFunds');
+        socket.emit('increaseIncome');
     }
 
     function increaseArmy() {
         socket.emit('increaseArmy');
+    }
+
+    function setArmyStance(stance) {
+        socket.emit('setArmyStance', stance);
     }
 
     // Draw everything
