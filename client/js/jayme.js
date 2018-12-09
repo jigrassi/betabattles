@@ -58,7 +58,7 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
             case "waiting":
                 Painter.drawText('Waiting for Opponent');
                 break;
-            case "fuck":
+            case "playing":
                 Painter.drawText(display_msg);
                 break;
             case "dc":
