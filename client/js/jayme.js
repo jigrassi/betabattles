@@ -6,6 +6,8 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
     var ctx = canvas.getContext("2d");
     canvas.width = 760;
     canvas.height = 650;
+    Painter.defaultStyles();
+
 
     Painter.defaultStyles();
 
@@ -101,6 +103,7 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
                 break;
             case "playing":
                 Painter.drawPlayerData(clientState);
+                Painter.drawOpponentData(clientState);
                 break;
             case "dc":
                 Painter.drawText('Disconnected');
