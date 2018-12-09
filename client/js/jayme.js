@@ -99,7 +99,6 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
     // Draw everything
     var render = function () {
         //Painter.drawBG();
-        console.log(gstate);
         switch(gstate) {
             case "waiting":
                 document.getElementById('loadingScreen').style.display='block';
