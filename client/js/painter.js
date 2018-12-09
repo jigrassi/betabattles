@@ -29,13 +29,13 @@ define(function() {
             ctx.beginPath();
             ctx.arc(200,325,75,0,2*Math.PI);
             ctx.fillText("Army: ", 200, 275);
-            ctx.fillText(clientState.myArmy, 200, 300);
+            ctx.fillText(Math.floor(clientState.myArmy), 200, 300);
             ctx.stroke();
 
             ctx.beginPath();
             ctx.arc(200,500,50,0,2*Math.PI);
             ctx.fillText("Base: ", 200, 475);
-            ctx.fillText(clientState.myBase, 200, 500);
+            ctx.fillText(Math.floor(clientState.myBase * 10) / 10, 200, 500);
             ctx.stroke();
 
             ctx.restore();
@@ -59,13 +59,13 @@ define(function() {
             ctx.beginPath();
             ctx.arc(500,325,75,0,2*Math.PI);
             ctx.fillText("Army: ", 500, 275);
-            ctx.fillText(clientState.oppArmy, 500, 300);
+            ctx.fillText(Math.floor(clientState.oppArmy), 500, 300);
             ctx.stroke();
 
             ctx.beginPath();
             ctx.arc(500,500,50,0,2*Math.PI);
             ctx.fillText("Base: ", 500, 475);
-            ctx.fillText(clientState.oppBase, 500, 500);
+            ctx.fillText(Math.floor(clientState.oppBase * 10) / 10, 500, 500);
             ctx.stroke();
             
             ctx.restore();
