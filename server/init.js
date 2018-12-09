@@ -7,5 +7,17 @@ module.exports = function(router, io) {
         socket.on('disconnect', function() {
             server.disconnect(socket);
         });
+
+        socket.on('increaseIncome', function() {
+            server.increaseIncome(socket);
+        });
+
+        socket.on('increaseArmy', function() {
+            server.increaseArmy(socket);
+        });
+
+        socket.on('setArmyStance', function(stance) {
+            server.setArmyStance(socket, stance);
+        });
     });
 }

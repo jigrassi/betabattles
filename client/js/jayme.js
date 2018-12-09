@@ -84,6 +84,7 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
     }
 
     function increaseIncome() {
+        console.log('increaseincome');
         socket.emit('increaseIncome');
     }
 

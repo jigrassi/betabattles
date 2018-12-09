@@ -11,7 +11,7 @@ module.exports = class ServerState {
         this.gameEnd = false;       
     }
 
-    increaseFunds(id) {
+    increaseIncome(id) {
         if(this.players[0].funds < 5) {
             return;
         }
