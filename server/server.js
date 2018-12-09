@@ -16,9 +16,24 @@ module.exports = {
         this.game_lookup[this.waiting_player.id] = game;
         this.game_lookup[player.id] = game;
 
-        game.init_players(this.waiting_player, player);
+        game.init(this.waiting_player, player);
         game.fuck(Object.keys(this.game_lookup).length);
         this.clear_waiting();
+    },
+
+    increaseIncome : function(player) {
+        game = this.game_lookup[player.id];
+        game.increaseIncome(player.id);
+    },
+
+    increaseArmy: function(player) {
+        game = this.game_lookup[player.id];
+        game.increaseArmy(player.id);
+    },
+
+    setArmyStance: function(player, stance) {
+        game = this.game_lookup[player.id];
+        game.setArmyStance(player.id, stance);
     },
 
     clear_waiting: function() {

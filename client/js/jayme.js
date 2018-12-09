@@ -1,4 +1,4 @@
-define(['painter'], function (Painter) {
+define(['painter', '../ClientState'], function (Painter, ClientState) {
 
       // Create the canvas
     var w = window;
@@ -8,6 +8,8 @@ define(['painter'], function (Painter) {
     canvas.height = 650;
 
     requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
+
+    clientState = new ClientState();
 
     // if (document.readyState === "complete") { prepareEventHandlers(); }
 
@@ -23,13 +25,29 @@ define(['painter'], function (Painter) {
 
     socket.on('dc', function() {
         setState("dc");
-    })
+    });
+
+    socket.on('update', function(newState) {
+        clientState.update(newState);
+    });
 
     // MAIN LOOP STUFF ##############################################
     var gstate = "waiting";
 
     function setState(state) {
         gstate = state;
+    }
+
+    function setArmyStance(stance) {
+        socket.emit('setPlayerArmyStance', stance);
+    }
+
+    function increaseIncome() {
+        socket.emit('increasePlayerFunds');
+    }
+
+    function increaseArmy() {
+        socket.emit('increaseArmy');
     }
 
     // Draw everything

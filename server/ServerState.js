@@ -1,9 +1,8 @@
-const initialFunds = 0;
-const initialIncome = 5;
-
-class serverState {
+module.exports = class ServerState {
 
     constructor() {
+        const initialFunds = 0;
+        const initialIncome = 5;
         var player1 = {funds: initialFunds, income: initialIncome, army: 0, stance: 'passive',  base: 100};
         var player2 = {funds: initialFunds, income: initialIncome, army: 0, stance: 'passive',  base: 100};
         this.players = [];
@@ -12,25 +11,23 @@ class serverState {
         this.gameEnd = false;       
     }
 
-    increasePlayerFunds() {
+    increasePlayerFunds(id) {
         if(this.players[0].funds < 5) {
             return;
-        } else {
-            this.players[0].funds -= 5;
-            this.players[0].income += 1;
         }
+        this.players[0].funds -= 5;
+        this.players[0].income += 1;
     }
 
-    increasePlayerArmy() {
+    increasePlayerArmy(id) {
         if(this.players[0].funds < 5) {
             return;
-        } else {
-            this.players[0].funds -= 5;
-            this.players[0].army += 1;
-        }
+        } 
+        this.players[0].funds -= 5;
+        this.players[0].army += 1;
     }
 
-    setPlayerStance(stance) {
+    setPlayerArmyStance(id, stance) {
         if(stance == 'passive') {
             this.players[0].stance = 'passive';
         } else if (stance == 'aggressive') {
@@ -76,4 +73,4 @@ class serverState {
         }
         return playerState;
     }
-}
+};
