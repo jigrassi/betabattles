@@ -10,6 +10,10 @@ define(function() {
             this.oppArmyStance = 'passive';
             this.myBase = 100;
             this.oppBase = 100;
+            this.readyState = false;
+            this.oppReadyState = false;
+            this.username = '';
+            this.oppUsername = '';
         }
 
         update(playerState) {
@@ -34,6 +38,15 @@ define(function() {
 
         increaseArmy() {
             server.increaseArmy();
+        }
+
+        updateReadyState(readyStateMap) {
+            this.readyState = readyStateMap.self;
+            this.oppReadyState = readyStateMap.opp;
+        }
+
+        setUsername(username) {
+            this.username = username;
         }
     }
 });

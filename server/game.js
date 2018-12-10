@@ -5,22 +5,27 @@ module.exports = {
     serverState: null,
     playersById: new Map(),
     tickInterval: null,
+    readyById: new Map(),
 
     init: function(p1, p2) {
         this.p1 = p1;
         this.p2 = p2;
         this.playersById[p1.id] = p1;
         this.playersById[p2.id] = p2;
+        this.readyById[p1.id] = false;
+        this.readyById[p2.id] = false;
         ServerState = require('./ServerState.js');
         this.serverState = new ServerState();
-        // bind is needed for tick to have the right 'this' reference
-        this.tickInterval = setInterval(function () {this.tick()}.bind(this), 1000);
-        console.log(this.p1.id + " playing against " + this.p2.id);
+        console.log(this.p1.id + " matched against " + this.p2.id);
+
     },
 
     gamestart: function() {
         this.p1.emit('gamestart');
         this.p2.emit('gamestart');
+        // bind is needed for tick to have the right 'this' reference
+        this.tickInterval = setInterval(function () {this.tick()}.bind(this), 1000);
+        console.log(this.p1.id + " playing against " + this.p2.id);
     },
 
     increaseIncome(id) {
@@ -45,12 +50,25 @@ module.exports = {
         this.p2.emit('update', this.serverState.createPlayerState(1));
     },
 
+    setReadyState(id, readyState) {
+        this.readyById[id] = readyState;
+        console.log("p1 ready:" + this.readyById[this.p1.id]);
+        console.log("p2 ready:" + this.readyById[this.p2.id])
+
+        if(this.readyById[this.p1.id] && this.readyById[this.p2.id]){
+            this.gamestart();
+        } else {
+            this.p1.emit('ready', {self: this.readyById[this.p1.id], opp: this.readyById[this.p2.id]});
+            this.p2.emit('ready', {self: this.readyById[this.p2.id], opp: this.readyById[this.p1.id]});
+        }
+    },
+
     tick: function() {
         this.serverState.tick();
         if (this.serverState.gameEnd) {
             this.p1.emit('gameend', this.serverState.players[0].base > 0);
             this.p2.emit('gameend', this.serverState.players[1].base > 0);
-            clearInterval(tickInterval);
+            clearInterval(this.tickInterval);
         } else {
             this.p1.emit('update', this.serverState.createPlayerState(0));
             this.p2.emit('update', this.serverState.createPlayerState(1));

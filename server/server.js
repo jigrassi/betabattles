@@ -15,11 +15,18 @@ module.exports = {
         this.game_lookup[player.id] = game;
 
         game.init(this.waiting_player, player);
-        game.gamestart();
+        //game.gamestart();
         this.clear_waiting();
     },
 
-    increaseIncome : function(player) {
+    setReadyState: function(player, ready) {
+        game = this.game_lookup[player.id];
+        if(game != null) {
+            game.setReadyState(player.id, ready);
+        }
+    },
+
+    increaseIncome: function(player) {
         game = this.game_lookup[player.id];
         game.increaseIncome(player.id);
     },

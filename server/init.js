@@ -19,5 +19,9 @@ module.exports = function(router, io) {
         socket.on('setArmyStance', function(stance) {
             server.setArmyStance(socket, stance);
         });
+
+        socket.on('ready', function(readyState) {
+            server.setReadyState(socket, readyState);
+        });
     });
 }

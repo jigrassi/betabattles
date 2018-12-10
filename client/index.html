@@ -17,7 +17,7 @@
         <p> S - Stealth: Your army will not attack and its size will be hidden from the opponent. If your opponent is attacking, your base will take damage. </p>
         <p> R - Recruit: Spend 5 funds to increase your army size by 1. </p>
 
-        <button id='ready' onclick="toggleReady()">
+        <button id='ready'>
             Ready
         </button>
 
@@ -25,7 +25,7 @@
         <p> Opponent Status: Not Ready </p>
 
         <p id='username'> 
-            <button id='username' onclick='setUsername()'>
+            <button id='username'>
                 Set Username
             </button>
         </p>
@@ -35,7 +35,6 @@
     <div id=gameCanvas>
         <canvas id="game"></canvas>
     </div>
-<script src="intro.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script data-main="main" src="require.js"></script>
 </body>

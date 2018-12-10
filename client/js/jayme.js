@@ -3,6 +3,9 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
       // Create the canvas
     var w = window;
     var canvas = document.getElementById("game");
+    var readyButtonElement = document.getElementById("ready");
+    var usernameElement = document.getElementById("username");
+
     var ctx = canvas.getContext("2d");
     canvas.width = 760;
     canvas.height = 650;
@@ -39,6 +42,29 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
         console.log('won ' + won);
     });
 
+    socket.on('ready', function(readyStateMap) {
+        console.log('updating..');
+        clientState.updateReadyState(readyStateMap);
+    });
+
+    function setUsername() {
+        var username = prompt("Enter your username");
+        if (username != null){
+            document.getElementById('username').innerHTML = 'You:' + username;
+            clientState.setUsername(username);
+        }
+    }
+
+    function toggleReady() {
+        if (clientState.username != null) {
+            clientState.ready = !clientState.ready;
+            //document.getElementById('playerStatus').innerHTML = clientState.ready  ? "Your Status: Ready" : "Your Status: Not Ready"
+            socket.emit('ready', clientState.ready);
+        } else {
+            setUsername();
+        }
+    }
+
     // LISTENERS ####################################################
     function onKeyDown(e) {
         console.log(e.key);
@@ -65,6 +91,10 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
         };
 
         window.addEventListener('keypress', onKeyDown, false);
+        usernameElement.addEventListener('click', setUsername, false);
+        readyButtonElement.addEventListener('click', toggleReady, false);
+
+
         // canvas.addEventListener('click', function(e) {
         //     var mouse = {
         //         x: e.pageX - canvasPosition.x,
@@ -102,13 +132,10 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
 
     // Draw everything
     var render = function () {
-        //Painter.drawBG();
-        switch(gstate) {
+        switch (gstate) {
             case "waiting":
                 document.getElementById('loadingScreen').style.display='block';
                 document.getElementById('gameCanvas').style.display='none';
-
-                //Painter.drawText('Waiting for Opponent');
                 break;
             case "playing":
                 Painter.drawBG();
