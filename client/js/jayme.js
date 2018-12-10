@@ -142,6 +142,7 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
                 document.getElementById('gameCanvas').style.display='block';
                 document.getElementById('loadingScreen').style.display='none';
                 Painter.drawPlayerData(clientState);
+                Painter.drawOpponentData(clientState);
                 break;
             case "dc":
                 Painter.drawText('Disconnected');

@@ -21,6 +21,11 @@ define(function() {
             ctx.stroke();
 
             ctx.beginPath();
+            ctx.rect(300, 325, 75, 40);
+            ctx.fillText(clientState.myArmyStance, 335, 345);
+            ctx.stroke();
+
+            ctx.beginPath();
             ctx.arc(200,150,50,0,2*Math.PI);
             ctx.fillText("Income: ", 200, 125);
             ctx.fillText(clientState.income, 200, 150);
@@ -46,26 +51,31 @@ define(function() {
             ctx.font = "10pt sans-serif";
 
             ctx.beginPath();
-            ctx.rect(435,30,125,40);
-            ctx.fillText("Funds:", 470, 50);
+            ctx.rect(560,30,125,40);
+            ctx.fillText("Funds:", 595, 50);
             ctx.stroke();
 
             ctx.beginPath();
-            ctx.arc(500,150,50,0,2*Math.PI);
-            ctx.fillText("Income: ", 500, 125);
-            ctx.fillText("Unknown", 500, 150);
+            ctx.rect(450, 325, 75, 40);
+            ctx.fillText(clientState.oppArmyStance, 485, 345);
             ctx.stroke();
 
             ctx.beginPath();
-            ctx.arc(500,325,75,0,2*Math.PI);
-            ctx.fillText("Army: ", 500, 275);
-            ctx.fillText(Math.floor(clientState.oppArmy), 500, 300);
+            ctx.arc(625,150,50,0,2*Math.PI);
+            ctx.fillText("Income: ", 625, 125);
+            ctx.fillText("Unknown", 625, 150);
             ctx.stroke();
 
             ctx.beginPath();
-            ctx.arc(500,500,50,0,2*Math.PI);
-            ctx.fillText("Base: ", 500, 475);
-            ctx.fillText(Math.floor(clientState.oppBase * 10) / 10, 500, 500);
+            ctx.arc(625,325,75,0,2*Math.PI);
+            ctx.fillText("Army: ", 625, 275);
+            ctx.fillText(clientState.oppArmy, 625, 300);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(625,500,50,0,2*Math.PI);
+            ctx.fillText("Base: ", 625, 475);
+            ctx.fillText(Math.floor(clientState.oppBase * 10) / 10, 625, 500);
             ctx.stroke();
             
             ctx.restore();
