@@ -53,8 +53,16 @@ module.exports = class ServerState {
         if(this.players[0].stance == 'aggressive' && this.players[1].stance == 'aggressive'){
             var player1damage = this.players[0].army * 0.1;
             var player2damage = this.players[1].army * 0.1;
-            this.players[0].army = Math.max(0, this.players[0].army - player2damage);
-            this.players[1].army = Math.max(0, this.players[1].army - player1damage);
+            this.players[0].army -= player2damage;
+            if (this.players[0].army < 0) {
+                this.players[0].base += this.players[0].army;
+                this.players[0].army = 0;
+            }
+            this.players[1].army -= player1damage;
+            if (this.players[1].army < 0) {
+                this.players[1].base += this.players[1].army;
+                this.players[1].army = 0;
+            }
         } else if (this.players[0].stance == 'aggressive') {
             this.players[1].base -= this.players[0].army * 0.1;
         } else if (this.players[1].stance == 'aggressive') {
