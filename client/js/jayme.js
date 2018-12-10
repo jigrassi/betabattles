@@ -35,6 +35,8 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
 
     socket.on('update', function(newState) {
         clientState.update(newState);
+
+        if clientState
     });
 
     socket.on('gameend', function(won) {
@@ -168,6 +170,13 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
                 document.getElementById('loadingScreen').style.display='none';
                 Painter.drawPlayerData(clientState);
                 Painter.drawOpponentData(clientState);
+                if(clientState.gameEnd) {
+                    if(clientState.youWin) {
+                        Painter.drawText('You Win!');
+                    } else {
+                        Painter.drawText('Get Rekt!');
+                    }
+                }
                 break;
             case "dc":
                 Painter.drawText('Disconnected');
@@ -178,7 +187,7 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
     // The main paint loop
     var main = function () {
         render();
-        requestAnimationFrame(main);    
+        requestAnimationFrame(main);
     };
 
     return {

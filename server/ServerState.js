@@ -1,51 +1,48 @@
 module.exports = class ServerState {
 
     constructor() {
-        const initialFunds = 0;
-        const initialIncome = 5;
-        var player1 = {funds: initialFunds, income: initialIncome, army: 0, stance: 'passive',  base: 100};
-        var player2 = {funds: initialFunds, income: initialIncome, army: 0, stance: 'passive',  base: 100};
         this.players = [];
-        this.players[0] = player1;
-        this.players[1] = player2;
-        this.gameEnd = false;       
+        var Player = require('./Player.js');
+        this.players[0] = new Player();
+        this.players[1] = new Player();
+        this.gameEnd = false;
     }
 
     increaseIncome(index) {
-        var player = this.players[index];
-        if(player.funds < 5) {
-            return;
-        }
-        var newIncome = player.income;
-        while (player.funds >= newIncome + 1) {
-            newIncome += 1;
-            player.funds -= newIncome;
-        }
-        player.income = newIncome;
+        this.players[index].increaseIncome();
     }
 
     increaseArmy(index) {
-        var player = this.players[index];
-        if(player.funds < 5) {
-            return;
-        }
-        player.army += Math.floor(player.funds/5);
-        player.funds %= 5;
+        this.players[index].increaseArmy();
     }
 
     setArmyStance(index, stance) {
-        var player = this.players[index];
-        if (player.army < 1) {
-            return;
-        }
-        if(stance == 'passive') {
-            player.stance = 'passive';
-        } else if (stance == 'aggressive') {
-            player.stance = 'aggressive';
-        }
+        this.players[index].setArmyStance();
+    }
+
+    restart() {
+        this.players[0].resetState();
+        this.players[1].resetState();
+        this.gameEnd = false;
     }
 
     tick() {
+        // check game end
+        if (this.players[0].base <= 0 && this.players[1].base <= 0) {
+            this.gameEnd = true;
+            this.winner = 'tie';
+            this.players[0].wins += 0.5;
+            this.players[0].wins += 0.5;
+        } else if (this.players[1].base <= 0) {
+            this.gameEnd = true;
+            this.winner = 0;
+            this.players[0].wins += 1;
+        } else if (this.players[0].base <= 0) {
+            this.gameEnd = true;
+            this.winner = 1;
+            this.players[1].wins += 1;
+        }
+
         //console.log("tick : " + this.stateString());
         this.players[0].funds += Math.round(this.players[0].income * this.players[0].base / 100);
         this.players[1].funds += Math.round(this.players[1].income * this.players[1].base / 100);
@@ -75,14 +72,6 @@ module.exports = class ServerState {
                 player.stance = 'passive';
             }
         }
-
-        if (this.players[0].base <= 0 && this.players[1].base <= 0) {
-            this.gameEnd = true;
-        } else if (this.players[1].base <= 0) {
-            this.gameEnd = true;
-        } else if (this.players[0].base <= 0) {
-            this.gameEnd = true;
-        }
     }
 
     createPlayerState(index) {
@@ -96,7 +85,11 @@ module.exports = class ServerState {
             myArmyStance: you.stance,
             oppArmyStance: opponent.stance,
             myBase: you.base,
-            oppBase: opponent.base
+            oppBase: opponent.base,
+            youWin: index == this.winner,
+            gameEnd: this.gameEnd,
+            myWins: you.wins,
+            oppWins: opponent.wins
         }
         return playerState;
     }

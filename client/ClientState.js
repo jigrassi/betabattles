@@ -15,6 +15,10 @@ define(function() {
             this.myUsername = '';
             this.oppUsername = '';
             this.oppPresent = false;
+            this.youWin = playerState.youWin;
+            this.gameEnd = playerState.gameEnd;
+            this.myWins = playerState.myWins;
+            this.oppWins = playerState.oppWins;
         }
 
         update(playerState) {
@@ -26,6 +30,10 @@ define(function() {
             this.oppArmyStance = playerState.oppArmyStance;
             this.myBase = playerState.myBase;
             this.oppBase = playerState.oppBase;
+            this.youWin = playerState.youWin;
+            this.gameEnd = playerState.gameEnd;
+            this.myWins = playerState.myWins;
+            this.oppWins = playerState.oppWins;
         }
 
         setArmyStance(stance) {
