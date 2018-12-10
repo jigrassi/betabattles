@@ -80,12 +80,13 @@ module.exports = {
 
         if(this.serverState.gameEnd) {
             clearInterval(this.tickInterval);
-            setTimeout(function () {this.restartGame()}.bind(this), 3000);;
+            setTimeout(function () {this.restartGame()}.bind(this), 3000);
         }
     },
 
     restartGame: function() {
         this.serverState.restart();
+        setTimeout(function () {this.gamestart()}.bind(this), 1000);
     },
 
     disconnect_all: function() {
