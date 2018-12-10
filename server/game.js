@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
 
     p1: null,
@@ -14,7 +15,7 @@ module.exports = {
         this.playersById[p2.id] = p2;
         this.readyById[p1.id] = false;
         this.readyById[p2.id] = false;
-        ServerState = require('./ServerState.js');
+        var ServerState = require('./ServerState.js');
         this.serverState = new ServerState();
         console.log(this.p1.id + " matched against " + this.p2.id);
 

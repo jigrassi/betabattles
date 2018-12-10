@@ -17,8 +17,8 @@ module.exports = class ServerState {
         if(player.funds < 5) {
             return;
         }
-        player.funds -= 5;
-        player.income += 1;
+        player.income += Math.floor(player.funds/5);
+        player.funds %= 5;
     }
 
     increaseArmy(index) {
@@ -27,8 +27,8 @@ module.exports = class ServerState {
         if(player.funds < 5) {
             return;
         } 
-        player.funds -= 5;
-        player.army += 1;
+        player.army += Math.floor(player.funds/5);
+        player.funds %= 5;
     }
 
     setArmyStance(index, stance) {
