@@ -16,17 +16,25 @@ module.exports = class ServerState {
         if(player.funds < 5) {
             return;
         }
-        player.income += Math.floor(player.funds/5);
-        player.funds %= 5;
+        var newIncome = player.income;
+        while (player.funds >= newIncome + 1) {
+            newIncome += 1;
+            player.funds -= newIncome;
+        }
+        player.income = newIncome;
     }
 
     increaseArmy(index) {
         var player = this.players[index];
         if(player.funds < 5) {
             return;
-        } 
-        player.army += Math.floor(player.funds/5);
-        player.funds %= 5;
+        }
+        var newArmy = player.army;
+        while (player.funds >= newArmy + 1) {
+            newArmy += 1;
+            player.funds -= newArmy;
+        }
+        player.army = newArmy;
     }
 
     setArmyStance(index, stance) {
