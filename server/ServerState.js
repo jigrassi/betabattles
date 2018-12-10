@@ -29,12 +29,8 @@ module.exports = class ServerState {
         if(player.funds < 5) {
             return;
         }
-        var newArmy = player.army;
-        while (player.funds >= newArmy + 1) {
-            newArmy += 1;
-            player.funds -= newArmy;
-        }
-        player.army = newArmy;
+        player.army += Math.floor(player.funds/5);
+        player.funds %= 5;
     }
 
     setArmyStance(index, stance) {
