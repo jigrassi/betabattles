@@ -11,8 +11,8 @@ module.exports = {
             return;
         }
         var game = require('./game.js');
-        this.game_lookup[this.waiting_player.id] = game;
-        this.game_lookup[player.id] = game;
+        this.game_lookup.set(this.waiting_player.id, game);
+        this.game_lookup.set(player.id, game);
 
         game.init(this.waiting_player, player);
         //game.gamestart();
@@ -20,24 +20,24 @@ module.exports = {
     },
 
     setReadyState: function(player, ready) {
-        game = this.game_lookup[player.id];
+        game = this.game_lookup.get(player.id);
         if(game != null) {
             game.setReadyState(player.id, ready);
         }
     },
 
     increaseIncome: function(player) {
-        game = this.game_lookup[player.id];
+        game = this.game_lookup.get(player.id);
         game.increaseIncome(player.id);
     },
 
     increaseArmy: function(player) {
-        game = this.game_lookup[player.id];
+        game = this.game_lookup.get(player.id);
         game.increaseArmy(player.id);
     },
 
     setArmyStance: function(player, stance) {
-        game = this.game_lookup[player.id];
+        game = this.game_lookup.get(player.id);
         game.setArmyStance(player.id, stance);
     },
 
@@ -47,7 +47,7 @@ module.exports = {
 
     disconnect: function(player) {
         console.log(`player ${player.id} disconnected`);
-        game = this.game_lookup[player.id];
+        game = this.game_lookup.get(player.id);
         if (game != null) {
             game.disconnect_all();
         }
