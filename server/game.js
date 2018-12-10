@@ -30,7 +30,7 @@ module.exports = {
         this.p1.emit('gamestart');
         this.p2.emit('gamestart');
         // bind is needed for tick to have the right 'this' reference
-        this.tickInterval = setInterval(function () {this.tick()}.bind(this), 1000);
+        this.tickInterval = setInterval(function () {this.tick()}.bind(this), 500);
         console.log(this.p1.id + " playing against " + this.p2.id);
     },
 
