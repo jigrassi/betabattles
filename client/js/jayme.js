@@ -35,8 +35,6 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
 
     socket.on('update', function(newState) {
         clientState.update(newState);
-
-        if clientState
     });
 
     socket.on('gameend', function(won) {
