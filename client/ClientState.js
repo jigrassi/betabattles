@@ -15,10 +15,10 @@ define(function() {
             this.myUsername = '';
             this.oppUsername = '';
             this.oppPresent = false;
-            this.youWin = playerState.youWin;
-            this.gameEnd = playerState.gameEnd;
-            this.myWins = playerState.myWins;
-            this.oppWins = playerState.oppWins;
+            this.youWin = false;
+            this.gameEnd = false;
+            this.myWins = 0;
+            this.oppWins = 0;
         }
 
         update(playerState) {
