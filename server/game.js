@@ -47,8 +47,14 @@ module.exports = {
 
     tick: function() {
         this.serverState.tick();
-        this.p1.emit('update', this.serverState.createPlayerState(0));
-        this.p2.emit('update', this.serverState.createPlayerState(1));   
+        if (this.serverState.gameEnd) {
+            this.p1.emit('gameend', this.serverState.players[0].base > 0);
+            this.p2.emit('gameend', this.serverState.players[1].base > 0);
+            clearInterval(tickInterval);
+        } else {
+            this.p1.emit('update', this.serverState.createPlayerState(0));
+            this.p2.emit('update', this.serverState.createPlayerState(1));
+        }
     },
 
     disconnect_all: function() {

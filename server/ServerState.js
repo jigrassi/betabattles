@@ -33,7 +33,7 @@ module.exports = class ServerState {
 
     setArmyStance(index, stance) {
         var player = this.players[index];
-        if (player.army <= 0) {
+        if (player.army < 1) {
             return;
         }
         if(stance == 'passive') {
@@ -51,8 +51,8 @@ module.exports = class ServerState {
         if(this.players[0].stance == 'aggressive' && this.players[1].stance == 'aggressive'){
             var player1damage = this.players[0].army * 0.1;
             var player2damage = this.players[1].army * 0.1;
-            this.players[0].army -= player2damage;
-            this.players[1].army -= player1damage;
+            this.players[0].army = Math.max(0, this.players[0].army - player2damage);
+            this.players[1].army = Math.max(0, this.players[1].army - player1damage);
         } else if (this.players[0].stance == 'aggressive') {
             this.players[1].base -= this.players[0].army * 0.1;
         } else if (this.players[1].stance == 'aggressive') {
@@ -60,8 +60,7 @@ module.exports = class ServerState {
         }
 
         for (var player of this.players) {
-            console.log(JSON.stringify(player));
-            if (player.army <= 0 && player.stance != 'passive') {
+            if (player.army < 1 && player.stance != 'passive') {
                 console.log('force to passive');
                 player.stance = 'passive';
             }

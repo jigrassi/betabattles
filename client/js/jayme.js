@@ -35,6 +35,10 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
         clientState.update(newState);
     });
 
+    socket.on('gameend', function(won) {
+        console.log('won ' + won);
+    });
+
     // LISTENERS ####################################################
     function onKeyDown(e) {
         console.log(e.key);
