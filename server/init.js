@@ -23,5 +23,9 @@ module.exports = function(router, io) {
         socket.on('ready', function(readyState) {
             server.setReadyState(socket, readyState);
         });
+
+        socket.on('username', function(username) {
+            server.setUsername(socket, username);
+        });
     });
 }

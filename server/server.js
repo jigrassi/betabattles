@@ -26,6 +26,13 @@ module.exports = {
         }
     },
 
+    setUsername: function(player, username) {
+        game = this.game_lookup[player.id];
+        if(game != null) {
+            game.setUsername(player.id, username);
+        }
+    },
+
     increaseIncome: function(player) {
         game = this.game_lookup.get(player.id);
         game.increaseIncome(player.id);

@@ -12,8 +12,9 @@ define(function() {
             this.oppBase = 100;
             this.readyState = false;
             this.oppReadyState = false;
-            this.username = '';
+            this.myUsername = '';
             this.oppUsername = '';
+            this.oppPresent = false;
         }
 
         update(playerState) {
@@ -45,8 +46,12 @@ define(function() {
             this.oppReadyState = readyStateMap.opp;
         }
 
-        setUsername(username) {
-            this.username = username;
+        updateUsernames(usernameMap) {
+            this.oppUsername = usernameMap.opp;
+        }
+
+        updateSelfUsername(username) {
+            this.myUsername = username;
         }
     }
 });

@@ -34,7 +34,6 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
     });
 
     socket.on('update', function(newState) {
-        console.log('updating..');
         clientState.update(newState);
     });
 
@@ -43,22 +42,41 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
     });
 
     socket.on('ready', function(readyStateMap) {
-        console.log('updating..');
         clientState.updateReadyState(readyStateMap);
+        if(clientState.oppReadyState) {
+            document.getElementById('oppReady').innerHTML = 'Opponent Status:' +  'Ready!';
+        } else {
+            document.getElementById('oppReady').innerHTML = 'Opponent Status: Not Ready';
+        }
+    });
+
+    socket.on('username', function(usernameMap) {
+        clientState.updateUsernames(usernameMap);
+        if(clientState.oppUsername == null || clientState.oppUsername == '') {
+            document.getElementById('oppUsername').innerHTML = 'Opponent: ' +  'Found!';
+        } else {
+            document.getElementById('oppUsername').innerHTML = 'Opponent: ' + clientState.oppUsername;
+        }
+    });
+
+    socket.on('matched', function(usernameMap) {
+        clientState.oppPresent = true;
+        document.getElementById('oppUsername').innerHTML = 'Opponent: Found!';
     });
 
     function setUsername() {
         var username = prompt("Enter your username");
         if (username != null){
             document.getElementById('username').innerHTML = 'You:' + username;
-            clientState.setUsername(username);
+            clientState.updateSelfUsername(username);
+            socket.emit('username', username);
         }
     }
 
     function toggleReady() {
-        if (clientState.username != null) {
+        if (clientState.myUsername != null) {
             clientState.ready = !clientState.ready;
-            //document.getElementById('playerStatus').innerHTML = clientState.ready  ? "Your Status: Ready" : "Your Status: Not Ready"
+            document.getElementById('playerStatus').innerHTML = clientState.ready  ? "Your Status: Ready" : "Your Status: Not Ready"
             socket.emit('ready', clientState.ready);
         } else {
             setUsername();

@@ -7,6 +7,7 @@ module.exports = {
     playersById: new Map(),
     tickInterval: null,
     readyById: new Map(),
+    usernameById: new Map(),
 
     init: function(p1, p2) {
         this.p1 = p1;
@@ -15,8 +16,12 @@ module.exports = {
         this.playersById[p2.id] = p2;
         this.readyById[p1.id] = false;
         this.readyById[p2.id] = false;
+        this.usernameById[p1.id] = '';
+        this.usernameById[p2.id] = '';
         var ServerState = require('./ServerState.js');
         this.serverState = new ServerState();
+        this.p1.emit('matched');
+        this.p2.emit('matched');
         console.log(this.p1.id + " matched against " + this.p2.id);
 
     },
@@ -53,8 +58,6 @@ module.exports = {
 
     setReadyState(id, readyState) {
         this.readyById[id] = readyState;
-        console.log("p1 ready:" + this.readyById[this.p1.id]);
-        console.log("p2 ready:" + this.readyById[this.p2.id])
 
         if(this.readyById[this.p1.id] && this.readyById[this.p2.id]){
             this.gamestart();
@@ -62,6 +65,13 @@ module.exports = {
             this.p1.emit('ready', {self: this.readyById[this.p1.id], opp: this.readyById[this.p2.id]});
             this.p2.emit('ready', {self: this.readyById[this.p2.id], opp: this.readyById[this.p1.id]});
         }
+    },
+
+    setUsername(id, username) {
+        this.usernameById[id] = username;
+
+        this.p1.emit('username', {self: this.usernameById[this.p1.id], opp: this.usernameById[this.p2.id]});
+        this.p2.emit('username', {self: this.usernameById[this.p2.id], opp: this.usernameById[this.p1.id]});
     },
 
     tick: function() {
