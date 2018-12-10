@@ -118,15 +118,23 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
     }
 
     function increaseIncome() {
-        console.log('increaseincome');
+        if (clientState.funds < 5) {
+            return;
+        }
         socket.emit('increaseIncome');
     }
 
     function increaseArmy() {
+        if (clientState.funds < 5) {
+            return;
+        }
         socket.emit('increaseArmy');
     }
 
     function setArmyStance(stance) {
+        if (stance == clientState.myArmyStance) {
+            return;
+        }
         socket.emit('setArmyStance', stance);
     }
 
