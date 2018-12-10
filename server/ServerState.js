@@ -47,8 +47,8 @@ module.exports = class ServerState {
 
     tick() {
         //console.log("tick : " + this.stateString());
-        this.players[0].funds += Math.round(this.players[0].income * this.players[0].base / 100);
-        this.players[1].funds += Math.round(this.players[1].income * this.players[1].base / 100);
+        this.players[0].funds += this.players[0].income;
+        this.players[1].funds += this.players[1].income;
 
         if(this.players[0].stance == 'aggressive' && this.players[1].stance == 'aggressive'){
             var player1damage = this.players[0].army * 0.1;
