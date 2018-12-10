@@ -47,11 +47,8 @@ define(function() {
         }
 
         updateUsernames(usernameMap) {
+            this.myUsername = usernameMap.self;
             this.oppUsername = usernameMap.opp;
-        }
-
-        updateSelfUsername(username) {
-            this.myUsername = username;
         }
     }
 });

@@ -68,13 +68,12 @@ define(['painter', '../ClientState'], function (Painter, ClientState) {
         var username = prompt("Enter your username");
         if (username != null){
             document.getElementById('username').innerHTML = 'You:' + username;
-            clientState.updateSelfUsername(username);
             socket.emit('username', username);
         }
     }
 
     function toggleReady() {
-        if (clientState.myUsername != null) {
+        if (clientState.myUsername != null && clientState.myUsername != '') {
             clientState.ready = !clientState.ready;
             document.getElementById('playerStatus').innerHTML = clientState.ready  ? "Your Status: Ready" : "Your Status: Not Ready"
             socket.emit('ready', clientState.ready);

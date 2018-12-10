@@ -69,7 +69,6 @@ module.exports = {
 
     setUsername(id, username) {
         this.usernameById[id] = username;
-
         this.p1.emit('username', {self: this.usernameById[this.p1.id], opp: this.usernameById[this.p2.id]});
         this.p2.emit('username', {self: this.usernameById[this.p2.id], opp: this.usernameById[this.p1.id]});
     },

@@ -15,7 +15,6 @@ module.exports = {
         this.game_lookup.set(player.id, game);
 
         game.init(this.waiting_player, player);
-        //game.gamestart();
         this.clear_waiting();
     },
 
@@ -27,7 +26,7 @@ module.exports = {
     },
 
     setUsername: function(player, username) {
-        game = this.game_lookup[player.id];
+        game = this.game_lookup.get(player.id);
         if(game != null) {
             game.setUsername(player.id, username);
         }
