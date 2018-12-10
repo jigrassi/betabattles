@@ -17,7 +17,7 @@ module.exports = class ServerState {
     }
 
     setArmyStance(index, stance) {
-        this.players[index].setArmyStance();
+        this.players[index].setArmyStance(stance);
     }
 
     restart() {
