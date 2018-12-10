@@ -12,7 +12,6 @@ module.exports = class ServerState {
     }
 
     increaseIncome(index) {
-        console.log("increaseIncome " + index + " : " + this.stateString());
         var player = this.players[index];
         if(player.funds < 5) {
             return;
@@ -22,7 +21,6 @@ module.exports = class ServerState {
     }
 
     increaseArmy(index) {
-        console.log("increaseArmy " + index + " : " + this.stateString());
         var player = this.players[index];
         if(player.funds < 5) {
             return;
@@ -44,7 +42,7 @@ module.exports = class ServerState {
     }
 
     tick() {
-        console.log("tick : " + this.stateString());
+        //console.log("tick : " + this.stateString());
         this.players[0].funds += this.players[0].income;
         this.players[1].funds += this.players[1].income;
 
