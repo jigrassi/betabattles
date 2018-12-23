@@ -26,21 +26,26 @@ define(function() {
             ctx.stroke();
 
             ctx.beginPath();
-            ctx.arc(200,150,50,0,2*Math.PI);
+            ctx.arc(200,150,Math.log(clientState.income+1)*10 + 30,0,2*Math.PI);
             ctx.fillText("Income: ", 200, 125);
             ctx.fillText(clientState.income, 200, 150);
             ctx.stroke();
 
             ctx.beginPath();
-            ctx.arc(200,325,75,0,2*Math.PI);
-            ctx.fillText("Army: ", 200, 275);
-            ctx.fillText(Math.floor(clientState.myArmy), 200, 300);
+            ctx.arc(200,325,Math.log(clientState.myArmy+1)*10 + 30,0,2*Math.PI);
+            ctx.fillText("Army: ", 200, 325);
+            ctx.fillText(Math.floor(clientState.myArmy), 200, 350);
             ctx.stroke();
 
             ctx.beginPath();
-            ctx.arc(200,500,50,0,2*Math.PI);
+            ctx.arc(200,500,Math.log(clientState.myBase+1)*10 + 30,0,2*Math.PI);
             ctx.fillText("Base: ", 200, 475);
             ctx.fillText(Math.floor(clientState.myBase * 10) / 10, 200, 500);
+            ctx.stroke();
+
+            ctx.font = "20pt sans-serif";
+            ctx.beginPath();
+            ctx.fillText("Score: " + clientState.myWins + " - " + clientState.oppWins, 400, 550);
             ctx.stroke();
 
             ctx.restore();
@@ -73,7 +78,7 @@ define(function() {
             ctx.stroke();
 
             ctx.beginPath();
-            ctx.arc(625,500,50,0,2*Math.PI);
+            ctx.arc(625,500,Math.log(clientState.oppBase+1)*10 + 30,0,2*Math.PI);
             ctx.fillText("Base: ", 625, 475);
             ctx.fillText(Math.floor(clientState.oppBase * 10) / 10, 625, 500);
             ctx.stroke();
