@@ -21,8 +21,8 @@ module.exports = class ServerState {
     }
 
     restart() {
-        this.players[0].resetState();
-        this.players[1].resetState();
+        this.players[0].resetStats();
+        this.players[1].resetStats();
         this.gameEnd = false;
     }
 
