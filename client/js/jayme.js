@@ -10,14 +10,12 @@ var usernameElement = document.getElementById("username");
 var ctx = canvas.getContext("2d");
 canvas.width = 760;
 canvas.height = 650;
-Painter.defaultStyles();
-
-
-Painter.defaultStyles();
 
 requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame || w.msRequestAnimationFrame || w.mozRequestAnimationFrame;
 
 var clientState = new ClientState();
+var painter = new Painter(ctx, canvas);
+painter.defaultStyles();
 
 document.onreadystatechange = function () {
   if(document.readyState === "complete"){
@@ -116,7 +114,14 @@ function handleCanvasClick(e) {
     } else if ((Math.pow(200-x,2) + Math.pow(325-y,2)) < Math.pow(Math.log(clientState.myArmy+1)*10 + 30,2)){
         increaseArmy();
     }
-    return [x,y];
+
+    for (i in painter.components) {
+        component = painter.components[i];
+        if (component.collides(x, y)) {
+            component.onClick();
+            return;
+        }
+    }
 }
 
 function prepareEventHandlers() {
@@ -164,21 +169,21 @@ var render = function () {
             document.getElementById('gameCanvas').style.display='none';
             break;
         case "playing":
-            Painter.drawBG();
+            painter.drawBG();
             document.getElementById('gameCanvas').style.display='block';
             document.getElementById('loadingScreen').style.display='none';
-            Painter.drawPlayerData(clientState);
-            Painter.drawOpponentData(clientState);
+            painter.drawPlayerData(clientState);
+            painter.drawOpponentData(clientState);
             if(clientState.gameEnd) {
                 if(clientState.youWin) {
-                    Painter.drawText('You Win!');
+                    painter.drawText('You Win!');
                 } else {
-                    Painter.drawText('Get Rekt!');
+                    painter.drawText('Get Rekt!');
                 }
             }
             break;
         case "dc":
-            Painter.drawText('Disconnected');
+            painter.drawText('Disconnected');
             break;
     }
 };
@@ -188,5 +193,4 @@ var jayme = function () {
     render();
     requestAnimationFrame(jayme);
 };
-
 w.onload = jayme;
