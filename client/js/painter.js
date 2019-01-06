@@ -59,11 +59,11 @@ class Painter {
         this.components.push(this.createCircleComponent(
             "Income:", clientState.income, 200, 150, Math.log(clientState.income + 1) * 10 + 30, "increaseIncome"));
         this.components.push(this.createCircleComponent(
-            "Army:", clientState.myArmy, 200, 325, Math.log(clientState.myArmy + 1) * 10 + 30, "increaseArmy"));
+            "Army:", Math.round(clientState.myArmy * 10) / 10, 200, 325, Math.log(clientState.myArmy + 1) * 10 + 30, "increaseArmy"));
         this.components.push(this.createRectComponent(
             clientState.myArmyStance, 300, 325, 100, 40, "toggleArmyStance"));
         this.components.push(this.createCircleComponent(
-            "Base:", clientState.myBase, 200, 500, Math.log(clientState.myBase + 1) * 10 + 30, ""));
+            "Base:", Math.round(clientState.myBase * 10) / 10, 200, 500, Math.log(clientState.myBase + 1) * 10 + 30, ""));
 
         // opponent data
         this.components.push(this.createRectComponent(
@@ -73,9 +73,9 @@ class Painter {
         this.components.push(this.createCircleComponent(
             "Income:", "unknown", 625, 150, 50, ""));
         this.components.push(this.createCircleComponent(
-            "Army:", clientState.oppArmy, 625, 325, 75, ""));
+            "Army:", clientState.oppArmy == "unknown" ? "unknown" : Math.round(clientState.oppArmy * 10) / 10, 625, 325, 75, ""));
         this.components.push(this.createCircleComponent(
-            "Base:", clientState.oppBase, 625, 500, Math.log(clientState.oppBase + 1) * 10 + 30, ""));
+            "Base:", Math.round(clientState.oppBase * 10) / 10, 625, 500, Math.log(clientState.oppBase + 1) * 10 + 30, ""));
 
         this.ctx.save();
         this.ctx.font = "10pt sans-serif";
@@ -107,5 +107,4 @@ class Painter {
     }
 };
 
-// painter.components.push(some stuff)
 export default Painter;
