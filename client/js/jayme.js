@@ -15,7 +15,6 @@ requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame
 
 var clientState = new ClientState();
 var painter = new Painter(ctx, canvas);
-painter.defaultStyles();
 
 document.onreadystatechange = function () {
   if(document.readyState === "complete"){
@@ -109,16 +108,21 @@ function handleCanvasClick(e) {
     x -= e.target.offsetLeft;
     y -= e.target.offsetTop;
 
-    if ((Math.pow(200-x,2) + Math.pow(150-y,2)) < Math.pow(Math.log(clientState.income+1)*10 + 30,2)) {
-        increaseIncome();
-    } else if ((Math.pow(200-x,2) + Math.pow(325-y,2)) < Math.pow(Math.log(clientState.myArmy+1)*10 + 30,2)){
-        increaseArmy();
-    }
-
-    for (i in painter.components) {
-        component = painter.components[i];
+    for (const i in painter.components) {
+        let component = painter.components[i];
         if (component.collides(x, y)) {
-            component.onClick();
+            // i don't like this switch but haven't figured out how to avoid it (dependency inversion?)
+            switch(component.onClick) {
+                case 'increaseIncome':
+                    increaseIncome();
+                    break;
+                case 'increaseArmy':
+                    increaseArmy();
+                    break;
+                case 'toggleArmyStance':
+                    toggleArmyStance();
+                    break;
+            }
             return;
         }
     }
@@ -161,6 +165,14 @@ function setArmyStance(stance) {
     socket.emit('setArmyStance', stance);
 }
 
+function toggleArmyStance() {
+    if (clientState.myArmyStance == 'passive') {
+        socket.emit('setArmyStance', 'aggressive');
+    } else {
+        socket.emit('setArmyStance', 'passive');
+    }
+}
+
 // Draw everything
 var render = function () {
     switch (gstate) {
@@ -172,8 +184,7 @@ var render = function () {
             painter.drawBG();
             document.getElementById('gameCanvas').style.display='block';
             document.getElementById('loadingScreen').style.display='none';
-            painter.drawPlayerData(clientState);
-            painter.drawOpponentData(clientState);
+            painter.drawGameState(clientState);
             if(clientState.gameEnd) {
                 if(clientState.youWin) {
                     painter.drawText('You Win!');
