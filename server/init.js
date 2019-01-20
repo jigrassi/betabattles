@@ -20,6 +20,10 @@ module.exports = function(router, io) {
             server.setArmyStance(socket, stance);
         });
 
+        socket.on('nuke', function() {
+            server.nuke(socket);
+        })
+
         socket.on('ready', function(readyState) {
             server.setReadyState(socket, readyState);
         });

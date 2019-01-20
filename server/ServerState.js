@@ -20,6 +20,16 @@ module.exports = class ServerState {
         this.players[index].setArmyStance(stance);
     }
 
+    nuke(index) {
+        let player = this.players[index];
+        if (player.funds < 200) {
+            return;
+        }
+        player.funds -= 200;
+        let opponent = this.players[1 - index];
+        opponent.army = 0;
+    }
+
     restart() {
         this.players[0].resetStats();
         this.players[1].resetStats();

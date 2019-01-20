@@ -66,6 +66,8 @@ class Painter {
             clientState.myArmyStance, 300, 325, 100, 40, '', "toggleArmyStance"));
         this.components.push(this.createCircleComponent(
             "Base:", Math.round(clientState.myBase * 10) / 10, 200, 500, Math.log(clientState.myBase + 1) * 10 + 30));
+        this.components.push(this.createRectComponent(
+            "Nuke", 150, 600, 100, 40, 'n', "nuke"));    
 
         // opponent data
         this.components.push(this.createRectComponent(

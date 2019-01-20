@@ -128,6 +128,9 @@ function executeEvent(eventName) {
         case 'toggleArmyStance':
             toggleArmyStance();
             break;
+        case 'nuke':
+            nuke();
+            break;
     }
 }
 
@@ -174,6 +177,13 @@ function toggleArmyStance() {
     } else {
         socket.emit('setArmyStance', 'passive');
     }
+}
+
+function nuke() {
+    if (clientState.funds < 200) {
+        return;
+    }
+    socket.emit('nuke');
 }
 
 // Draw everything

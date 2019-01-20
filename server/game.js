@@ -56,6 +56,13 @@ module.exports = {
         this.p2.emit('update', this.serverState.createPlayerState(1));
     },
 
+    nuke(id) {
+        var player = this.playersById[id];
+        var player_index = player == this.p1 ? 0 : 1;
+        this.serverState.nuke(player_index);
+        player.emit('update', this.serverState.createPlayerState(player_index));
+    },
+
     setReadyState(id, readyState) {
         this.readyById[id] = readyState;
 

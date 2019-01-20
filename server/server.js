@@ -47,6 +47,11 @@ module.exports = {
         game.setArmyStance(player.id, stance);
     },
 
+    nuke: function(player) {
+        game = this.game_lookup.get(player.id);
+        game.nuke(player.id);
+    },
+    
     clear_waiting: function() {
         this.waiting_player = -1;
     },
