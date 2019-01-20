@@ -8,7 +8,7 @@ class Painter {
         this.setDefaultStyles();
     }
 
-    createRectComponent(fillText, left, top, width, height, onClickEvent) {
+    createRectComponent(fillText, left, top, width, height, keyListened='', onClickEventName="") {
         let ctx = this.ctx; // needed because `this` inside the dict doesn't escape dict scope
         return {
             render: function() {
@@ -21,11 +21,12 @@ class Painter {
             collides: function(x, y) {
                 return (x >= left && x <= (left + width) && y >= top && y <= (top + height));
             },
-            onClick: onClickEvent
+            keyListened: keyListened,
+            onClick: onClickEventName
         }
     }
 
-    createCircleComponent(title, fillText, centerX, centerY, radius, onClickEvent) {
+    createCircleComponent(title, fillText, centerX, centerY, radius, keyListened='', onClickEventName="") {
         let ctx = this.ctx; // needed because `this` inside the dict doesn't escape dict scope
         return {
             render: function() {
@@ -39,7 +40,8 @@ class Painter {
             collides: function(x, y) {
                 return Math.pow(centerX - x, 2) + Math.pow(centerY - y, 2) <= radius * radius;
             },
-            onClick: onClickEvent
+            keyListened: keyListened,
+            onClick: onClickEventName
         }
     }
 
@@ -57,25 +59,25 @@ class Painter {
         this.components.push(this.createRectComponent(
             "Funds: " + clientState.funds, 135, 30, 125, 40, ""));
         this.components.push(this.createCircleComponent(
-            "Income:", clientState.income, 200, 150, Math.log(clientState.income + 1) * 10 + 30, "increaseIncome"));
+            "Income:", clientState.income, 200, 150, Math.log(clientState.income + 1) * 10 + 30, 'e', "increaseIncome"));
         this.components.push(this.createCircleComponent(
-            "Army:", Math.round(clientState.myArmy * 10) / 10, 200, 325, Math.log(clientState.myArmy + 1) * 10 + 30, "increaseArmy"));
+            "Army:", Math.round(clientState.myArmy * 10) / 10, 200, 325, Math.log(clientState.myArmy + 1) * 10 + 30, 'r', "increaseArmy"));
         this.components.push(this.createRectComponent(
-            clientState.myArmyStance, 300, 325, 100, 40, "toggleArmyStance"));
+            clientState.myArmyStance, 300, 325, 100, 40, '', "toggleArmyStance"));
         this.components.push(this.createCircleComponent(
-            "Base:", Math.round(clientState.myBase * 10) / 10, 200, 500, Math.log(clientState.myBase + 1) * 10 + 30, ""));
+            "Base:", Math.round(clientState.myBase * 10) / 10, 200, 500, Math.log(clientState.myBase + 1) * 10 + 30));
 
         // opponent data
         this.components.push(this.createRectComponent(
-            "Funds: unknown", 560, 30, 125, 40, ""));
+            "Funds: unknown", 560, 30, 125, 40));
         this.components.push(this.createRectComponent(
-            clientState.oppArmyStance, 425, 325, 100, 40, ""));
+            clientState.oppArmyStance, 425, 325, 100, 40));
         this.components.push(this.createCircleComponent(
             "Income:", "unknown", 625, 150, 50, ""));
         this.components.push(this.createCircleComponent(
-            "Army:", clientState.oppArmy == "unknown" ? "unknown" : Math.round(clientState.oppArmy * 10) / 10, 625, 325, 75, ""));
+            "Army:", clientState.oppArmy == "unknown" ? "unknown" : Math.round(clientState.oppArmy * 10) / 10, 625, 325, 75));
         this.components.push(this.createCircleComponent(
-            "Base:", Math.round(clientState.oppBase * 10) / 10, 625, 500, Math.log(clientState.oppBase + 1) * 10 + 30, ""));
+            "Base:", Math.round(clientState.oppBase * 10) / 10, 625, 500, Math.log(clientState.oppBase + 1) * 10 + 30));
 
         this.ctx.save();
         this.ctx.font = "10pt sans-serif";

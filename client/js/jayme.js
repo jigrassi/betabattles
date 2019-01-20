@@ -85,19 +85,19 @@ function toggleReady() {
 
 // LISTENERS ####################################################
 function onKeyDown(e) {
-    console.log(e.key);
+    for (const i in painter.components) {
+        let component = painter.components[i];
+        if (component.keyListened === e.key) {
+            executeEvent(component.onClick);
+        }
+    }
     switch(e.key) {
-        case 'e':
-            increaseIncome();
-            break;
+        // these keystrokes don't correspond to clicking a UI element
         case 'a':
             setArmyStance('aggressive');
             break;
         case 's':
             setArmyStance('passive');
-            break;
-        case 'r':
-            increaseArmy();
             break;
     }
 }
@@ -111,20 +111,23 @@ function handleCanvasClick(e) {
     for (const i in painter.components) {
         let component = painter.components[i];
         if (component.collides(x, y)) {
-            // i don't like this switch but haven't figured out how to avoid it (dependency inversion?)
-            switch(component.onClick) {
-                case 'increaseIncome':
-                    increaseIncome();
-                    break;
-                case 'increaseArmy':
-                    increaseArmy();
-                    break;
-                case 'toggleArmyStance':
-                    toggleArmyStance();
-                    break;
-            }
-            return;
+            executeEvent(component.onClick);
         }
+    }
+}
+
+function executeEvent(eventName) {
+    // i don't like this switch but haven't figured out how to avoid it (dependency inversion?)
+    switch(eventName) {
+        case 'increaseIncome':
+            increaseIncome();
+            break;
+        case 'increaseArmy':
+            increaseArmy();
+            break;
+        case 'toggleArmyStance':
+            toggleArmyStance();
+            break;
     }
 }
 
