@@ -180,7 +180,7 @@ function toggleArmyStance() {
 }
 
 function nuke() {
-    if (clientState.funds < 200) {
+    if (clientState.funds < 100) {
         return;
     }
     socket.emit('nuke');

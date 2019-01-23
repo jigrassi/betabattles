@@ -22,12 +22,12 @@ module.exports = class ServerState {
 
     nuke(index) {
         let player = this.players[index];
-        if (player.funds < 200) {
+        if (player.funds < 100) {
             return;
         }
-        player.funds -= 200;
+        player.funds -= 100;
         let opponent = this.players[1 - index];
-        opponent.army = 0;
+        opponent.army = Math.floor(opponent.army / 2);
     }
 
     restart() {
