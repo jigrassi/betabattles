@@ -8,22 +8,6 @@ module.exports = function(router, io) {
             server.disconnect(socket);
         });
 
-        socket.on('increaseIncome', function() {
-            server.increaseIncome(socket);
-        });
-
-        socket.on('increaseArmy', function() {
-            server.increaseArmy(socket);
-        });
-
-        socket.on('setArmyStance', function(stance) {
-            server.setArmyStance(socket, stance);
-        });
-
-        socket.on('nuke', function() {
-            server.nuke(socket);
-        })
-
         socket.on('ready', function(readyState) {
             server.setReadyState(socket, readyState);
         });
@@ -31,5 +15,9 @@ module.exports = function(router, io) {
         socket.on('username', function(username) {
             server.setUsername(socket, username);
         });
+
+        socket.on('move', function(moveInfo) {
+            server.move(socket, moveInfo);
+        })
     });
 }

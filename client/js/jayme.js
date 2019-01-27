@@ -154,28 +154,28 @@ function increaseIncome() {
     if (clientState.funds < 5) {
         return;
     }
-    socket.emit('increaseIncome');
+    socket.emit('move', {'moveName': 'increaseIncome'});
 }
 
 function increaseArmy() {
     if (clientState.funds < 5) {
         return;
     }
-    socket.emit('increaseArmy');
+    socket.emit('move', {'moveName': 'increaseArmy'});
 }
 
 function setArmyStance(stance) {
     if (stance == clientState.myArmyStance) {
         return;
     }
-    socket.emit('setArmyStance', stance);
+    socket.emit('move', {'moveName': 'setArmyStance', 'armyStance': stance});
 }
 
 function toggleArmyStance() {
     if (clientState.myArmyStance == 'passive') {
-        socket.emit('setArmyStance', 'aggressive');
+        socket.emit('move', {'moveName': 'setArmyStance', 'armyStance': 'aggressive'});
     } else {
-        socket.emit('setArmyStance', 'passive');
+        socket.emit('move', {'moveName': 'setArmyStance', 'armyStance': 'passive'});
     }
 }
 
@@ -183,7 +183,7 @@ function nuke() {
     if (clientState.funds < 100) {
         return;
     }
-    socket.emit('nuke');
+    socket.emit('move', {'moveName': 'nuke'});
 }
 
 // Draw everything
