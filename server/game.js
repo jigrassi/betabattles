@@ -1,105 +1,101 @@
-"use strict";
-module.exports = {
+const ConnectionHub = require('./ConnectionHub.js').Instance();
+const ServerState = require('./ServerState.js');
 
-    p1: null,
-    p2: null,
-    serverState: null,
-    playersById: new Map(),
-    tickInterval: null,
-    readyById: new Map(),
-    usernameById: new Map(),
-
-    init: function(p1, p2) {
-        this.p1 = p1;
-        this.p2 = p2;
-        this.playersById[p1.id] = p1;
-        this.playersById[p2.id] = p2;
-        this.readyById[p1.id] = false;
-        this.readyById[p2.id] = false;
-        this.usernameById[p1.id] = '';
-        this.usernameById[p2.id] = '';
-        var ServerState = require('./ServerState.js');
+class Game {
+    constructor(p1Id, p2Id) {
+        this.tickInterval = null;
+        // TODO: gather player state into one source
+        this.playersById = new Map();
+        this.readyById = new Map();
+        this.usernameById = new Map();
+        this.p1Id = p1Id;
+        this.p2Id = p2Id;
+        this.readyById[p1Id] = false;
+        this.readyById[p2Id] = false;
+        this.usernameById[p1Id] = '';
+        this.usernameById[p2Id] = '';
+        
+        // server state is redundant, move server state logic back into Game
         this.serverState = new ServerState();
-        this.p1.emit('matched');
-        this.p2.emit('matched');
-        console.log(this.p1.id + " matched against " + this.p2.id);
 
-    },
+        ConnectionHub.emit(this.p1Id, 'matched');
+        ConnectionHub.emit(this.p2Id, 'matched');
 
-    gamestart: function() {
-        this.p1.emit('gamestart');
-        this.p2.emit('gamestart');
+        console.log(this.p1Id + " matched against " + this.p2Id);
+    }
+
+    gamestart() {
+        ConnectionHub.emit(this.p1Id, 'gamestart');
+        ConnectionHub.emit(this.p2Id, 'gamestart');
         // bind is needed for tick to have the right 'this' reference
         this.tickInterval = setInterval(function () {this.tick()}.bind(this), 500);
-        console.log(this.p1.id + " playing against " + this.p2.id);
-    },
+        console.log(this.p1Id + " playing against " + this.p2Id);
+    }
 
     increaseIncome(id) {
-        var player = this.playersById[id];
-        var player_index = (player == this.p1) ? 0 : 1;
+        let player_index = (id == this.p1Id) ? 0 : 1;
         this.serverState.increaseIncome(player_index);
-        player.emit('update', this.serverState.createPlayerState(player_index));
-    },
+        ConnectionHub.emit(id, 'update', this.serverState.createPlayerState(player_index));
+    }
 
     increaseArmy(id) {
-        var player = this.playersById[id];
-        var player_index = player == this.p1 ? 0 : 1;
+        let player_index = id == this.p1Id ? 0 : 1;
         this.serverState.increaseArmy(player_index);
-        player.emit('update', this.serverState.createPlayerState(player_index));
-    },
+        ConnectionHub.emit(id, 'update', this.serverState.createPlayerState(player_index));
+    }
 
     setArmyStance(id, stance) {
-        var player = this.playersById[id];
-        var player_index = player == this.p1 ? 0 : 1;
+        let player_index = id == this.p1Id ? 0 : 1;
         this.serverState.setArmyStance(player_index, stance);
-        this.p1.emit('update', this.serverState.createPlayerState(0));
-        this.p2.emit('update', this.serverState.createPlayerState(1));
-    },
+        ConnectionHub.emit(this.p1Id, 'update', this.serverState.createPlayerState(0));
+        ConnectionHub.emit(this.p2Id, 'update', this.serverState.createPlayerState(1));
+    }
 
     nuke(id) {
-        var player = this.playersById[id];
-        var player_index = player == this.p1 ? 0 : 1;
+        let player_index = id == this.p1Id ? 0 : 1;
         this.serverState.nuke(player_index);
-        player.emit('update', this.serverState.createPlayerState(player_index));
-    },
+        ConnectionHub.emit(id, 'update', this.serverState.createPlayerState(player_index));
+    }
 
     setReadyState(id, readyState) {
         this.readyById[id] = readyState;
 
-        if(this.readyById[this.p1.id] && this.readyById[this.p2.id]){
+        if(this.readyById[this.p1Id] && this.readyById[this.p2Id]){
             this.gamestart();
         } else {
-            this.p1.emit('ready', {self: this.readyById[this.p1.id], opp: this.readyById[this.p2.id]});
-            this.p2.emit('ready', {self: this.readyById[this.p2.id], opp: this.readyById[this.p1.id]});
+            ConnectionHub.emit(this.p1Id, 'ready', {self: this.readyById[this.p1Id], opp: this.readyById[this.p2Id]});
+            ConnectionHub.emit(this.p2Id, 'ready', {self: this.readyById[this.p2Id], opp: this.readyById[this.p1Id]});
         }
-    },
+    }
 
     setUsername(id, username) {
         this.usernameById[id] = username;
-        this.p1.emit('username', {self: this.usernameById[this.p1.id], opp: this.usernameById[this.p2.id]});
-        this.p2.emit('username', {self: this.usernameById[this.p2.id], opp: this.usernameById[this.p1.id]});
-    },
+        ConnectionHub.emit(this.p1Id, 'username', {self: this.usernameById[this.p1Id], opp: this.usernameById[this.p2Id]});
+        ConnectionHub.emit(this.p2Id, 'username', {self: this.usernameById[this.p2Id], opp: this.usernameById[this.p1Id]});
+    }
 
-    tick: function() {
+    tick() {
         this.serverState.tick();
-        this.p1.emit('update', this.serverState.createPlayerState(0));
-        this.p2.emit('update', this.serverState.createPlayerState(1));
+        ConnectionHub.emit(this.p1Id, 'update', this.serverState.createPlayerState(0));
+        ConnectionHub.emit(this.p2Id, 'update', this.serverState.createPlayerState(1));
 
         if(this.serverState.gameEnd) {
             clearInterval(this.tickInterval);
             setTimeout(function () {this.restartGame()}.bind(this), 3000);
         }
-    },
+    }
 
-    restartGame: function() {
+    restartGame() {
         this.serverState.restart();
         setTimeout(function () {this.gamestart()}.bind(this), 1000);
-    },
+    }
 
-    disconnect_all: function() {
+    disconnect_all() {
         console.log('disconnected both');
         clearInterval(this.tickInterval);
-        this.p1.emit('dc');
-        this.p2.emit('dc');
+        ConnectionHub.emit(this.p1Id, 'dc');
+        ConnectionHub.emit(this.p2Id, 'dc');
     }
 }
+
+module.exports = Game

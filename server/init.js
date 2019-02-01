@@ -1,23 +1,26 @@
-module.exports = function(router, io) {
-    var server = require('./server.js');
+const Server = require('./Server.js');
+const ConnectionHub = require('./ConnectionHub.js').Instance();
 
+module.exports = function(router, io) {
+    const serverInstance = new Server();
     io.of('/betabattles').on('connection', function(socket){
-        server.join(socket);
+        ConnectionHub.registerConnection(socket);
+        serverInstance.join(socket);
 
         socket.on('disconnect', function() {
-            server.disconnect(socket);
+            serverInstance.disconnect(socket);
         });
 
         socket.on('ready', function(readyState) {
-            server.setReadyState(socket, readyState);
+            serverInstance.setReadyState(socket, readyState);
         });
 
         socket.on('username', function(username) {
-            server.setUsername(socket, username);
+            serverInstance.setUsername(socket, username);
         });
 
         socket.on('move', function(moveInfo) {
-            server.move(socket, moveInfo);
+            serverInstance.move(socket, moveInfo);
         })
     });
 }

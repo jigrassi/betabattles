@@ -1,44 +1,45 @@
-module.exports = {
-    waiting_player: -1,
-    game_lookup: new Map(),
+const Game = require('./Game.js');
 
+class Server {
+    constructor() {
+        this.waiting_player = -1;
+        this.game_lookup = new Map();
+    }
     // player here is a socket connection instance
-    join: function(player) {
+    join(player) {
         console.log(`player ${player.id} connected`);
         if (this.waiting_player === -1) {
             console.log('waiting on the bench');
             this.waiting_player = player;
             return;
         }
-        var game = require('./game.js');
+        let game = new Game(this.waiting_player.id, player.id);
         this.game_lookup.set(this.waiting_player.id, game);
         this.game_lookup.set(player.id, game);
-
-        game.init(this.waiting_player, player);
         this.clear_waiting();
-    },
+    }
 
-    setReadyState: function(player, ready) {
-        game = this.game_lookup.get(player.id);
+    setReadyState(player, ready) {
+        let game = this.game_lookup.get(player.id);
         if(game != null) {
             game.setReadyState(player.id, ready);
         }
-    },
+    }
 
-    setUsername: function(player, username) {
-        game = this.game_lookup.get(player.id);
+    setUsername(player, username) {
+        let game = this.game_lookup.get(player.id);
         if(game != null) {
             game.setUsername(player.id, username);
         }
-    },
+    }
 
-    clear_waiting: function() {
+    clear_waiting() {
         this.waiting_player = -1;
-    },
+    }
 
-    disconnect: function(player) {
+    disconnect(player) {
         console.log(`player ${player.id} disconnected`);
-        game = this.game_lookup.get(player.id);
+        let game = this.game_lookup.get(player.id);
         if (game != null) {
             game.disconnect_all();
         }
@@ -46,10 +47,10 @@ module.exports = {
         if (this.waiting_player == player) {
             this.clear_waiting();
         }
-    },
+    }
 
-    move: function(player, moveInfo) {
-        game = this.game_lookup.get(player.id);
+    move(player, moveInfo) {
+        let game = this.game_lookup.get(player.id);
         switch(moveInfo.moveName) {
             case 'increaseIncome':
                 game.increaseIncome(player.id);
@@ -65,4 +66,6 @@ module.exports = {
                 break;
         }
     }
-};
+}
+
+module.exports = Server;
