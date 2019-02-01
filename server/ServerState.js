@@ -1,8 +1,8 @@
-module.exports = class ServerState {
+const Player = require('./Player.js');
 
+class ServerState {
     constructor() {
         this.players = [];
-        var Player = require('./Player.js');
         this.players[0] = new Player();
         this.players[1] = new Player();
         this.gameEnd = false;
@@ -108,3 +108,5 @@ module.exports = class ServerState {
         return JSON.stringify(this.players[0]) + " : " + JSON.stringify(this.players[1]);
     }
 };
+
+module.exports = ServerState;
