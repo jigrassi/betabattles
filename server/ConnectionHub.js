@@ -15,21 +15,21 @@ class ConnectionHub {
 
   registerConnection(socket) {
     console.log(`Registered ${socket.id}`);
-    this.socketById[socket.id] = socket;
+    this.socketById.set(socket.id, socket);
   }
 
   clearConnection(socketId) {
-    this.socketById[socketId] = socket;
+    this.socketById.delete(socket.id);
   }
 
   emit(socketId, message, data = null) {
-    if (this.socketById[socketId] === null) {
+    if (!this.socketById.has(socketId)) {
       console.error(`${socketId} is not registered!`);
       return;
     }
 
     console.log(`Emitting ${message} to ${socketId}`);
-    const socket = this.socketById[socketId];
+    const socket = this.socketById.get(socketId);
 
     if (data === null) {
       socket.emit(message);
