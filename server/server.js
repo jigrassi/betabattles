@@ -1,4 +1,5 @@
 const Game = require('./Game.js');
+const ConnectionHub = require('./ConnectionHub.js').Instance();
 
 class Server {
     constructor() {
@@ -13,7 +14,7 @@ class Server {
             this.waiting_player = player;
             return;
         }
-        let game = new Game(this.waiting_player.id, player.id);
+        let game = new Game(this.waiting_player.id, player.id, ConnectionHub);
         this.game_lookup.set(this.waiting_player.id, game);
         this.game_lookup.set(player.id, game);
         this.clear_waiting();
@@ -41,7 +42,7 @@ class Server {
         console.log(`player ${player.id} disconnected`);
         let game = this.game_lookup.get(player.id);
         if (game != null) {
-            game.disconnect_all();
+            game.disconnectAll();
         }
         this.game_lookup.delete(player.id);
         if (this.waiting_player == player) {
