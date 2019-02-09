@@ -1,4 +1,4 @@
-const Player = require('./Player.js');
+const Player = require('./player.js');
 
 class Game {
     constructor(p1Id, p2Id, msgSender) {

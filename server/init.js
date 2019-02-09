@@ -1,5 +1,5 @@
-const Server = require('./Server.js');
-const ConnectionHub = require('./ConnectionHub.js').Instance();
+const Server = require('./server.js');
+const ConnectionHub = require('./connectionhub.js').Instance();
 
 module.exports = function(router, io) {
     const serverInstance = new Server();

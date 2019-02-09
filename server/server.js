@@ -1,5 +1,5 @@
-const Game = require('./Game.js');
-const ConnectionHub = require('./ConnectionHub.js').Instance();
+const Game = require('./game.js');
+const ConnectionHub = require('./connectionhub.js').Instance();
 
 class Server {
     constructor() {
