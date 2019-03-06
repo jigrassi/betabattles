@@ -81,7 +81,7 @@ class Game {
     }
 
     getOpponentId(id) {
-        return (id == this.p1Id) ? this.p2Id : this.p2Id;
+        return (id == this.p1Id) ? this.p2Id : this.p1Id;
     }
 
     getOpponent(id) {
