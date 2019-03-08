@@ -1,69 +1,79 @@
-const Game = require('./game.js');
-const ConnectionHub = require('./connectionhub.js').Instance();
+const Game = require('./game');
+const ReadyCheck = require('./ready-check');
+const ConnectionHub = require('./connectionhub').Instance();
 
+// The "Do Everything" Game Server
+// Handles tracking players and matchmaking logic
+// Creates Game instances
+// Passes messages through to the game given the playerId
 class Server {
     constructor() {
-        this.waiting_player = -1;
-        this.game_lookup = new Map();
+        this.waitingPlayerId = -1;
+        this.gameLookup = new Map();
+        this.readyCheckLookup = new Map();
     }
-    // player here is a socket connection instance
-    join(player) {
-        console.log(`player ${player.id} connected`);
-        if (this.waiting_player === -1) {
+
+    join(playerId) {
+        console.log(`playerId ${playerId} connected`);
+        if (this.waitingPlayerId === -1) {
             console.log('waiting on the bench');
-            this.waiting_player = player;
+            this.waitingPlayerId = playerId;
             return;
         }
-        let game = new Game(this.waiting_player.id, player.id, ConnectionHub);
-        this.game_lookup.set(this.waiting_player.id, game);
-        this.game_lookup.set(player.id, game);
-        this.clear_waiting();
+
+        const newReadyCheck = new ReadyCheck();
+        newReadyCheck.addUsers([this.waitingPlayerId, playerId]);
+
+        this.readyCheckLookup.set(this.waitingPlayerId, newReadyCheck);
+        this.readyCheckLookup.set(playerId, newReadyCheck);
+
+        this.clearWaiting();
     }
 
-    setReadyState(player, ready) {
-        let game = this.game_lookup.get(player.id);
-        if(game != null) {
-            game.setReadyState(player.id, ready);
+    setReadyState(playerId, isReady) {
+        const readyCheck = this.readyCheckLookup.get(playerId);
+        readyCheck.setReadyState(playerId, isReady);
+
+        if (readyCheck.allReady()) {
+            const playerIds = readyCheck.getUsernames();
+            const game = new Game(playerIds, ConnectionHub);
+
+            playerIds.forEach((playerId) => {
+                this.gameLookup.set(playerId, game);
+            })
         }
     }
 
-    setUsername(player, username) {
-        let game = this.game_lookup.get(player.id);
-        if(game != null) {
-            game.setUsername(player.id, username);
-        }
+    clearWaiting() {
+        this.waitingPlayer = -1;
     }
 
-    clear_waiting() {
-        this.waiting_player = -1;
-    }
-
-    disconnect(player) {
-        console.log(`player ${player.id} disconnected`);
-        let game = this.game_lookup.get(player.id);
+    disconnect(playerId) {
+        console.log(`player ${playerId} disconnected`);
+        let game = this.gameLookup.get(playerId);
         if (game != null) {
             game.disconnectAll();
         }
-        this.game_lookup.delete(player.id);
-        if (this.waiting_player == player) {
-            this.clear_waiting();
+        this.gameLookup.delete(playerId);
+        if (this.waitingPlayer == player) {
+            this.clearWaiting();
         }
     }
 
-    move(player, moveInfo) {
-        let game = this.game_lookup.get(player.id);
+    move(playerId, moveInfo) {
+        let game = this.gameLookup.get(playerId);
         switch(moveInfo.moveName) {
             case 'increaseIncome':
-                game.increaseIncome(player.id);
+                game.increaseIncome(playerId);
                 break;
             case 'increaseArmy':
-                game.increaseArmy(player.id);
+                game.increaseArmy(playerId);
                 break;
             case 'setArmyStance':
-                game.setArmyStance(player.id, moveInfo.armyStance);
+                game.setArmyStance(playerId, moveInfo.armyStance);
                 break;
             case 'nuke':
-                game.nuke(player.id);
+                game.nuke(playerId);
                 break;
         }
     }

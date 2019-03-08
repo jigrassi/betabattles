@@ -1,4 +1,4 @@
-module.exports = class Player {
+class Player {
     constructor() {
         this.resetStats();
         this.wins = 0;
@@ -43,3 +43,5 @@ module.exports = class Player {
         }
     }
 }
+
+module.exports = Player;

@@ -1,30 +1,26 @@
-const Player = require('./player.js');
+const Player = require('./player');
 
 class Game {
-    constructor(p1Id, p2Id, msgSender) {
+    /**
+     * Maps playerId to player object
+     * Sets msgSender
+     * @param playerIds - player IDs
+     * @param msgSender - injected interface for communicating with player
+     */
+    constructor(playerIds, msgSender) {
         console.log('constructing game');
         this.tickInterval = null;
-        // TODO: gather player state into one source
         this.playerById = new Map();
-        this.playerById.set(p1Id, new Player());
-        this.playerById.set(p2Id, new Player());
 
-        this.readyById = new Map();
-        this.usernameById = new Map();
-        this.p1Id = p1Id;
-        this.p2Id = p2Id;
-        // TODO: fix these misuses of Map type
-        this.readyById[p1Id] = false;
-        this.readyById[p2Id] = false;
-        this.usernameById[p1Id] = '';
-        this.usernameById[p2Id] = '';
+        playerIds.forEach((playerId) => {
+            this.playerById.set(playerId, new Player());
+        })
+
+        this.p1Id = playerIds[0];
+        this.p2Id = playerIds[1];
+
         this.gameEnd = false;
         this.msgSender = msgSender;
-
-        this.msgSender.emit(this.p1Id, 'matched');
-        this.msgSender.emit(this.p2Id, 'matched');
-
-        console.log(this.p1Id + " matched against " + this.p2Id);
     }
 
     gamestart() {
@@ -61,23 +57,6 @@ class Game {
         opponent.army = Math.floor(opponent.army / 2);
         this.updatePlayerState(id);
         this.updatePlayerState(this.getOpponentId(id));
-    }
-
-    setReadyState(id, readyState) {
-        this.readyById[id] = readyState;
-
-        if(this.readyById[this.p1Id] && this.readyById[this.p2Id]){
-            this.gamestart();
-        } else {
-            this.msgSender.emit(this.p1Id, 'ready', {self: this.readyById[this.p1Id], opp: this.readyById[this.p2Id]});
-            this.msgSender.emit(this.p2Id, 'ready', {self: this.readyById[this.p2Id], opp: this.readyById[this.p1Id]});
-        }
-    }
-
-    setUsername(id, username) {
-        this.usernameById[id] = username;
-        this.msgSender.emit(this.p1Id, 'username', {self: this.usernameById[this.p1Id], opp: this.usernameById[this.p2Id]});
-        this.msgSender.emit(this.p2Id, 'username', {self: this.usernameById[this.p2Id], opp: this.usernameById[this.p1Id]});
     }
 
     getOpponentId(id) {
@@ -143,7 +122,7 @@ class Game {
 
         if(this.gameEnd) {
             clearInterval(this.tickInterval);
-            setTimeout(function () {this.restartGame()}.bind(this), 3000);
+            // setTimeout(function () {this.restartGame()}.bind(this), 3000);
         }
     }
 
