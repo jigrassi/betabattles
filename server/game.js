@@ -23,6 +23,10 @@ class Game {
         this.msgSender = msgSender;
     }
 
+    getPlayerIds() {
+        return Array.from(this.playerById.keys());
+    }
+
     gamestart() {
         this.msgSender.emit(this.p1Id, 'gamestart');
         this.msgSender.emit(this.p2Id, 'gamestart');

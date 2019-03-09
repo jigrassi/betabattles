@@ -3,9 +3,9 @@ const Game = require("../game");
 let emptyMsger = { emit: jest.fn() };
 let p1 = { name: 'playerOne', id: 'p1' };
 let p2 = { name: 'playerTwo', id: 'p2' };
-
+const playerIds = [p1['id'], p2['id']];
 test('full game sim, one sided offensive', () => {
-	let game = new Game(p1['id'], p2['id'], emptyMsger);
+	let game = new Game(playerIds, emptyMsger);
 
 	console.log('ticking and increasing p1 income and army');
 	for (var i = 0; i < 10; i++) {

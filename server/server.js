@@ -1,6 +1,6 @@
 const Game = require('./game');
 const ReadyCheck = require('./ready-check');
-const ConnectionHub = require('./connectionhub').Instance();
+const ConnectionHub = require('./connection-hub').Instance();
 
 // The "Do Everything" Game Server
 // Handles tracking players and matchmaking logic
@@ -27,6 +27,8 @@ class Server {
         this.readyCheckLookup.set(this.waitingPlayerId, newReadyCheck);
         this.readyCheckLookup.set(playerId, newReadyCheck);
 
+        ConnectionHub.emit(this.waitingPlayerId, 'matched');
+        ConnectionHub.emit(playerId, 'matched');
         this.clearWaiting();
     }
 
@@ -34,28 +36,57 @@ class Server {
         const readyCheck = this.readyCheckLookup.get(playerId);
         readyCheck.setReadyState(playerId, isReady);
 
+        const playerIds = readyCheck.getUsernames();
+
         if (readyCheck.allReady()) {
-            const playerIds = readyCheck.getUsernames();
             const game = new Game(playerIds, ConnectionHub);
 
-            playerIds.forEach((playerId) => {
-                this.gameLookup.set(playerId, game);
-            })
+            playerIds.forEach((id) => {
+                this.gameLookup.set(id, game);
+            });
+
+            game.gamestart();
+
+            this.clearReadyCheck(playerId);
         }
+
+        playerIds.forEach((id) => {
+            if (id != playerId) {
+                ConnectionHub.emit(id, 'ready', isReady);
+            }
+        });
     }
 
     clearWaiting() {
         this.waitingPlayer = -1;
     }
 
+    clearGame(playerId) {
+        if (this.gameLookup.has(playerId)) {
+            const game = this.gameLookup.get(playerId);
+            game.disconnectAll();
+            game.getPlayerIds().forEach((playerId) => {
+                this.gameLookup.delete(playerId);
+            });
+        }
+    }
+
+    clearReadyCheck(playerId) {
+        if (this.readyCheckLookup.has(playerId)) {
+            const readyCheck = this.readyCheckLookup.get(playerId);
+            readyCheck.getUsernames().forEach((playerId) => {
+                this.readyCheckLookup.delete(playerId);
+            });
+        }
+    }
+
     disconnect(playerId) {
         console.log(`player ${playerId} disconnected`);
-        let game = this.gameLookup.get(playerId);
-        if (game != null) {
-            game.disconnectAll();
-        }
-        this.gameLookup.delete(playerId);
-        if (this.waitingPlayer == player) {
+
+        this.clearGame(playerId);
+        this.clearReadyCheck(playerId);
+
+        if (this.waitingPlayerId == playerId) {
             this.clearWaiting();
         }
     }

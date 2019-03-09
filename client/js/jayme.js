@@ -42,9 +42,8 @@ socket.on('gameend', function(won) {
     console.log('won ' + won);
 });
 
-socket.on('ready', function(readyStateMap) {
-    clientState.updateReadyState(readyStateMap);
-    if(clientState.oppReadyState) {
+socket.on('ready', function(isReady) {
+    if(isReady) {
         document.getElementById('oppReady').innerHTML = 'Opponent Status:' +  'Ready!';
     } else {
         document.getElementById('oppReady').innerHTML = 'Opponent Status: Not Ready';
@@ -65,22 +64,10 @@ socket.on('matched', function(usernameMap) {
     document.getElementById('oppUsername').innerHTML = 'Opponent: Found!';
 });
 
-function setUsername() {
-    var username = prompt("Enter your username");
-    if (username != null){
-        document.getElementById('username').innerHTML = 'You:' + username;
-        socket.emit('username', username);
-    }
-}
-
 function toggleReady() {
-    if (clientState.myUsername != null && clientState.myUsername != '') {
-        clientState.ready = !clientState.ready;
-        document.getElementById('playerStatus').innerHTML = clientState.ready  ? "Your Status: Ready" : "Your Status: Not Ready"
-        socket.emit('ready', clientState.ready);
-    } else {
-        setUsername();
-    }
+    clientState.ready = !clientState.ready;
+    document.getElementById('playerStatus').innerHTML = clientState.ready  ? "Your Status: Ready" : "Your Status: Not Ready"
+    socket.emit('ready', clientState.ready);
 }
 
 // LISTENERS ####################################################
@@ -136,7 +123,6 @@ function executeEvent(eventName) {
 
 function prepareEventHandlers() {
     window.addEventListener('keypress', onKeyDown, false);
-    usernameElement.addEventListener('click', setUsername, false);
     readyButtonElement.addEventListener('click', toggleReady, false);
 
     var canvas = document.getElementById("game");
