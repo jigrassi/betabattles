@@ -84,7 +84,8 @@ class Server {
 
     disconnect(playerId) {
         console.log(`player ${playerId} disconnected`);
-
+        // TODO: need to disconnect both players no matter what...
+        // crashes if disconnect in lobby and other person tries to ready up
         this.clearGame(playerId);
         this.clearReadyCheck(playerId);
 
