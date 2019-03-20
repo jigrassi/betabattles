@@ -58,7 +58,8 @@ class Server {
     }
 
     clearWaiting() {
-        this.waitingPlayer = -1;
+        console.log('clear waiting player');
+        this.waitingPlayerId = -1;
     }
 
     clearGame(playerId) {
@@ -75,6 +76,7 @@ class Server {
         if (this.readyCheckLookup.has(playerId)) {
             const readyCheck = this.readyCheckLookup.get(playerId);
             readyCheck.getUsernames().forEach((playerId) => {
+                console.log(`player ${playerId} removed from readyCheckLookup`);
                 this.readyCheckLookup.delete(playerId);
             });
         }
