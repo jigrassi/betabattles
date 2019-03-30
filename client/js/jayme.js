@@ -125,8 +125,10 @@ function prepareEventHandlers() {
     window.addEventListener('keypress', onKeyDown, false);
     readyButtonElement.addEventListener('click', toggleReady, false);
 
-    var canvas = document.getElementById("game");
+    var canvas = document.getElementById('game');
     canvas.addEventListener('click', handleCanvasClick, false);
+
+    var playButton = document.getElementById('play')
 }
 
 // MAIN LOOP STUFF ##############################################
